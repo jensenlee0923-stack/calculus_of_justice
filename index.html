@@ -1,443 +1,963 @@
+Save this as `index.html` and paste it into GitHub as the whole file.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Calculus of Justice</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables for a modern palette */
         :root {
-            --bg-gradient: linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #334155;
-            --text-light: #64748b;
-            --heading-color: #0f172a;
-            --accent-primary: #6366f1;
-            --accent-hover: #4f46e5;
-            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            --box-bg: #f8fafc;
-            --box-border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
+            --paper: #f3f1eb;
+            --card: #fffcf8;
+            --ink: #1c1917;
+            --body: #3f3a34;
+            --muted: #6f675e;
+            --line: #e4ddd2;
+            --line-strong: #d4cdc2;
+            --panel: #f7f4ee;
+            --norway: #1b5e45;
+            --safrica: #8a4b12;
+            --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+            --sans: "Source Sans 3", "Segoe UI", sans-serif;
         }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        ::selection { background: #e6dfd2; color: var(--ink); }
 
         body {
-            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            font-family: var(--sans);
+            font-size: 1.0625rem;
             line-height: 1.7;
-            color: var(--text-main);
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
+            color: var(--body);
+            background: var(--paper);
+            padding: 48px 24px 80px;
         }
 
+        .shell {
+            width: min(740px, 100%);
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, h4 { text-wrap: balance; }
+
         h1 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: clamp(2.35rem, 5vw, 3.35rem);
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            color: var(--ink);
             text-align: center;
-            font-size: 2.8em;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 40px;
-            letter-spacing: -1px;
+            margin: 0;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 40px;
+            height: 1px;
+            margin: 18px auto 0;
+            background: var(--ink);
         }
 
         h2 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            color: var(--heading-color);
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--box-border);
-            padding-bottom: 10px;
+            font-family: var(--serif);
+            font-weight: 600;
+            color: var(--ink);
+            font-size: clamp(1.65rem, 3vw, 2.05rem);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin: 0;
         }
 
         h3 {
-            font-family: 'Poppins', sans-serif;
-            color: var(--accent-primary);
-            margin-top: 0;
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 1.28rem;
+            letter-spacing: -0.015em;
+            color: var(--ink);
+            margin: 0 0 0.55rem;
         }
 
-        /* Modern Card Styling with entry animation */
+        p { margin: 0 0 1rem; }
+
+        strong { font-weight: 600; color: var(--ink); }
+
+        .masthead { margin-bottom: 28px; }
+
+        .step-count {
+            display: none;
+            margin: 22px 0 0;
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0;
+            list-style: none;
+            margin: 26px 0 0;
+            padding: 0;
+            border-top: 1px solid var(--line-strong);
+        }
+
+        .steps li {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 0;
+            padding-top: 12px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .steps li::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: transparent;
+        }
+
+        .steps li.is-done,
+        .steps li.is-current { color: var(--ink); }
+
+        .steps li.is-done::before,
+        .steps li.is-current::before { background: var(--ink); }
+
         .page {
             display: none;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.5);
-            animation: fadeIn 0.5s ease-out forwards;
+            background: var(--card);
+            padding: clamp(28px, 5vw, 48px);
+            border: 1px solid var(--line);
+            box-shadow: 0 18px 40px rgba(28, 25, 23, 0.05);
         }
 
         .page.active {
             display: block;
+            animation: fadeIn 0.4s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        p {
-            font-size: 1.05em;
-            color: var(--text-main);
+        .page-title {
+            margin-bottom: 1.4rem;
+            padding-bottom: 1.15rem;
+            border-bottom: 1px solid var(--line);
         }
 
-        /* Distinct interactive sections */
+        .page-index {
+            display: block;
+            margin-bottom: 0.45rem;
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .page-index::before { content: "Part "; }
+
+        .lede {
+            font-family: var(--serif);
+            font-size: 1.22rem;
+            line-height: 1.55;
+            color: var(--ink);
+        }
+
+        .models,
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            list-style: none;
+            margin: 0 0 0.4rem;
+            padding: 0;
+        }
+
+        .models li,
+        .stats li { margin: 0; }
+
+        .models li {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line-strong);
+        }
+
+        .models li:first-child { border-top-color: var(--norway); }
+        .models li:last-child { border-top-color: var(--safrica); }
+
+        .model-name,
+        .stat-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
         .interactive-box {
-            background-color: var(--box-bg);
-            border: 1px solid var(--box-border);
-            padding: 25px;
-            border-radius: 12px;
-            margin: 25px 0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 2rem 0 0;
+            padding: 1.6rem 0 0;
+            border-top: 1px solid var(--line);
         }
 
-        .interactive-box:hover {
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        .interactive-box > :last-child { margin-bottom: 0; }
+
+        .interactive-box ul:not(.stats) {
+            margin: 0.2rem 0 1rem;
+            padding-left: 1.15rem;
         }
 
-        /* Highlight box for final reflection */
-        .highlight-box {
-            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
-            border: 1px solid #99f6e4;
+        .interactive-box ul:not(.stats) li {
+            margin: 0 0 0.6rem;
+            padding-left: 0.2rem;
         }
 
-        /* Beautiful buttons */
-        button {
-            font-family: 'Inter', sans-serif;
+        .interactive-box ul:not(.stats) li::marker { color: #b3aa9e; }
+
+        .formula {
+            margin: 1.35rem 0 0.25rem;
+            padding: 1.15rem 0.5rem 1.2rem;
+            text-align: center;
+            color: var(--ink);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .formula .eq {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-family: var(--serif);
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(1.55rem, 3.4vw, 2rem);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .formula .op { font-style: normal; }
+
+        .integral-wrap {
+            display: inline-grid;
+            grid-template-rows: auto auto auto;
+            justify-items: center;
+            font-style: normal;
+            line-height: 1;
+            transform: translateY(-0.02em);
+        }
+
+        .integral-sign {
+            font-family: var(--serif);
+            font-size: 1.45em;
+            line-height: 0.72;
+        }
+
+        .lim-top,
+        .lim-bot {
+            font-family: var(--sans);
+            font-size: 0.38em;
             font-weight: 600;
-            background: var(--accent-gradient);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 12px;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.25);
+            font-style: normal;
+            letter-spacing: 0;
+            line-height: 1;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(99, 102, 241, 0.35);
-        }
+        .lim-top { margin-bottom: 0.15em; }
+        .lim-bot { margin-top: 0.15em; }
 
-        /* Thematic Button Colors */
-        button.btn-norway { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25); }
-        button.btn-safrica { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 4px 6px rgba(245, 158, 11, 0.25); }
-        button.btn-dilemma-1 { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 6px rgba(139, 92, 246, 0.25); }
-        button.btn-dilemma-2 { background: linear-gradient(135deg, #334155 0%, #0f172a 100%); box-shadow: 0 4px 6px rgba(51, 65, 85, 0.25); }
-        button.btn-dilemma-3 { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); box-shadow: 0 4px 6px rgba(239, 68, 68, 0.25); }
-
-        /* Modern Inputs */
-        input[type="number"] {
-            font-family: 'Inter', sans-serif;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: 2px solid var(--box-border);
-            border-radius: 8px;
-            width: 160px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="number"]:focus {
-            border-color: var(--accent-primary);
-        }
-
-        /* Range Slider */
-        input[type="range"] {
-            accent-color: var(--accent-primary);
-        }
-
-        /* Feedback text */
-        .feedback {
-            font-weight: 600;
-            margin-left: 15px;
-            font-size: 0.95em;
-        }
-        .feedback.success { color: var(--success); }
-        .feedback.error { color: var(--danger); }
-
-        /* Math Typography */
         .math {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.1em;
-            background: #e2e8f0;
-            color: #0f172a;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 600;
+            font-family: var(--serif);
+            font-style: italic;
+            font-weight: 500;
+            font-size: 1.08em;
+            color: var(--ink);
+            background: none;
+            padding: 0;
         }
 
-        ul, ol {
-            padding-left: 25px;
+        .models .math { font-size: 1.2rem; line-height: 1.35; }
+
+        .gini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 4px;
         }
 
-        li {
+        .gini-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            padding: 16px 16px 12px;
+        }
+
+        .gini-card label {
+            display: block;
             margin-bottom: 10px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--ink);
         }
 
-        /* Navigation layout */
+        .answer-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input[type="number"] {
+            font-family: var(--serif);
+            font-variant-numeric: tabular-nums;
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 1.05rem;
+            border: 1px solid var(--line-strong);
+            border-radius: 0;
+            outline: none;
+            background: white;
+            color: var(--ink);
+        }
+
+        input[type="number"]:focus { border-color: var(--ink); }
+
+        .feedback {
+            display: block;
+            min-height: 1.35em;
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .feedback.success { color: var(--norway); }
+        .feedback.error { color: #9f2d2d; }
+
+        .slider-scale {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 8px 0 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--ink);
+            margin: 6px 0 4px;
+        }
+
+        .graph {
+            width: min(440px, 100%);
+            margin: 12px auto 0;
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: transparent;
+        }
+
+        .axis-label { font-size: 11px; fill: var(--muted); font-family: var(--sans); }
+        .axis-title { font-size: 12px; font-weight: 600; fill: var(--body); font-family: var(--sans); }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 18px;
+            list-style: none;
+            margin: 4px 0 0;
+            padding: 0;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .legend li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .key { display: inline-block; flex: 0 0 auto; }
+        .key-equal { width: 22px; border-top: 1.5px dashed #8a8178; }
+        .key-lorenz { width: 22px; height: 2px; background: #1e3a5f; }
+        .key-area { width: 12px; height: 12px; background: rgba(30, 58, 95, 0.14); border: 1px solid rgba(30, 58, 95, 0.35); }
+
+        .stats { gap: 0; margin-top: 0.4rem; }
+
+        .stats li { padding: 4px 0 0; }
+
+        .stats li + li {
+            border-left: 1px solid var(--line);
+            padding-left: 28px;
+        }
+
+        .stats li:first-child { padding-right: 28px; }
+
+        .stat-value {
+            display: block;
+            margin-top: 2px;
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 2.15rem;
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+            color: var(--ink);
+        }
+
+        .stat-a .stat-value { color: var(--norway); }
+        .stat-b .stat-value { color: var(--safrica); }
+
+        .note,
+        .fine-print {
+            margin: 14px 0 0;
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 0.98rem;
+            color: var(--muted);
+        }
+
+        .choices {
+            display: grid;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .choice-grid { grid-template-columns: 1fr 1fr; }
+        .choice-stack { grid-template-columns: 1fr; }
+
+        button {
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 0.94rem;
+            line-height: 1.35;
+            background: var(--ink);
+            color: #fffcf8;
+            border: 1px solid var(--ink);
+            padding: 11px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+
+        button:hover { background: #3a342e; }
+
+        button:disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+            background: var(--ink);
+        }
+
+        .choices button {
+            width: 100%;
+            margin: 0;
+            text-align: left;
+            white-space: normal;
+            background: transparent;
+            color: var(--ink);
+            border: 1px solid var(--line-strong);
+            border-left-width: 3px;
+            font-weight: 500;
+            padding: 14px 16px;
+        }
+
+        .choices button:hover { background: var(--panel); }
+
+        .choices button.is-selected,
+        .choices button.is-selected:hover {
+            background: var(--ink);
+            color: #fffcf8;
+            border-color: var(--ink);
+        }
+
+        button.btn-norway { border-left-color: var(--norway); }
+        button.btn-safrica { border-left-color: var(--safrica); }
+        button.btn-dilemma-1 { border-left-color: #3d4f7c; }
+        button.btn-dilemma-2 { border-left-color: var(--ink); }
+        button.btn-dilemma-3 { border-left-color: #8f2d2d; }
+
+        .choices button.is-selected.btn-norway,
+        .choices button.is-selected.btn-safrica,
+        .choices button.is-selected.btn-dilemma-1,
+        .choices button.is-selected.btn-dilemma-2,
+        .choices button.is-selected.btn-dilemma-3 { border-left-color: var(--ink); }
+
+        .result-box {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: var(--panel);
+            border-left: 2px solid var(--ink);
+            color: var(--body);
+        }
+
+        .result-box[hidden] { display: none; }
+        .result-box:not([hidden]) { animation: fadeIn 0.35s ease-out; }
+        .result-box.tone-green { border-left-color: var(--norway); }
+        .result-box.tone-red { border-left-color: #8f2d2d; }
+        .result-box.tone-amber { border-left-color: var(--safrica); }
+
+        .highlight-box {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-top: 1px solid var(--line);
+            padding: 28px 24px 24px;
+        }
+
+        .prompt-card {
+            background: var(--card);
+            padding: 22px 22px 18px;
+            margin-top: 8px;
+            border: 1px solid var(--line);
+        }
+
+        .prompt-card h4 {
+            margin: 0 0 12px;
+            color: var(--ink);
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 1.35rem;
+            letter-spacing: -0.02em;
+        }
+
+        .stances {
+            list-style: none;
+            counter-reset: stance;
+            display: grid;
+            gap: 0;
+            margin: 8px 0 16px;
+            padding: 0;
+        }
+
+        .stances li {
+            counter-increment: stance;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+            align-items: start;
+            margin: 0;
+            padding: 14px 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .stances li::before {
+            content: counter(stance);
+            width: 26px;
+            height: 26px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line-strong);
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--ink);
+        }
+
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 40px;
-            border-top: 1px solid var(--box-border);
-            padding-top: 25px;
+            align-items: center;
+            gap: 12px;
+            margin-top: 2rem;
+            padding-top: 1.15rem;
+            border-top: 1px solid var(--line);
         }
 
-        /* Graph Styling */
-        svg {
-            background: white;
-            border: 1px solid var(--box-border);
-            border-radius: 12px;
-            margin-top: 15px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        .btn-back {
+            background: transparent;
+            color: var(--muted);
+            border-color: transparent;
+            padding-left: 0;
+            padding-right: 0;
         }
-        .axis-label { font-size: 11px; fill: var(--text-light); font-family: 'Inter', sans-serif;}
-        .axis-title { font-size: 13px; font-weight: 600; fill: var(--text-main); font-family: 'Inter', sans-serif;}
 
-        /* Result popups */
-        .result-box {
-            margin-top: 25px; 
-            padding: 20px; 
-            border-left: 4px solid var(--accent-primary); 
-            display: none; 
-            background: white;
-            border-radius: 0 8px 8px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            animation: fadeIn 0.4s ease-out;
+        .btn-back:hover {
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .btn-next { margin-left: auto; }
+
+        .check-btn {
+            margin: 0;
+            padding: 10px 14px;
+            white-space: nowrap;
+            font-size: 0.88rem;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--ink);
+            outline-offset: 3px;
+        }
+
+        .noscript {
+            margin-top: 16px;
+            padding: 12px 14px;
+            background: var(--card);
+            border: 1px solid var(--line);
+        }
+
+        @media (max-width: 720px) {
+            body { padding: 28px 16px 48px; }
+            .step-count { display: block; }
+            .step-name {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+            .models,
+            .gini-grid,
+            .choice-grid { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr; gap: 16px; }
+            .stats li + li,
+            .stats li:first-child {
+                border-left: none;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            .nav-buttons { flex-direction: column-reverse; align-items: stretch; }
+            .nav-buttons button,
+            .btn-next { width: 100%; margin-left: 0; }
+            .btn-back {
+                border: 1px solid var(--line-strong);
+                padding: 11px 16px;
+                text-align: center;
+            }
+            .answer-row { flex-direction: column; align-items: stretch; }
+            .check-btn { width: 100%; }
+            .highlight-box { padding: 22px 16px 18px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
         }
     </style>
 </head>
 <body>
-
-    <h1>The Calculus of Justice</h1>
-
-    <div id="page1" class="page active">
-        <h2>1. The Mathematics of Inequality</h2>
-        <p>How do we measure if a society is fair? Economists use a tool called the <strong>Lorenz Curve</strong> to graph the distribution of wealth. The x-axis represents the percentage of the population (from poorest to richest), and the y-axis represents the percentage of total wealth they hold.</p>
-        <p>If wealth were distributed perfectly equally, the bottom 20% of people would hold exactly 20% of the wealth, forming a perfectly straight line: <span class="math">y = x</span>.</p>
-        <p>In reality, the curve sags downward. The area between the line of perfect equality and the actual Lorenz curve represents total inequality. We calculate this area using definite integrals to find the <strong>Gini Coefficient</strong>.</p>
-        
-        <div class="interactive-box">
-            <h3>The Gini Formula</h3>
-            <p>The Gini coefficient is exactly twice the area between the line of equality <span class="math">y = x</span> and the Lorenz curve <span class="math">L(x)</span>, evaluated from 0 to 1:</p>
-            <p style="text-align: center; font-size: 1.4em; color: var(--heading-color);"><strong>G = 2 &int;<sub>0</sub><sup>1</sup> [x - L(x)] dx</strong></p>
-        </div>
-
-        <div class="nav-buttons">
-            <div></div> <button onclick="nav('page2')">Next: The Calculation Engine &rarr;</button>
-        </div>
-    </div>
-
-    <div id="page2" class="page">
-        <h2>2. The Calculation Engine</h2>
-        <p>You are a mathematical analyst examining the real-world wealth distributions of two distinct countries. We have modeled their economies using the following polynomial functions:</p>
-        <ul>
-            <li><strong>Society A (Norway):</strong> <span class="math">L<sub>A</sub>(x) = 0.8x<sup>2</sup> + 0.2x</span></li>
-            <li><strong>Society B (South Africa):</strong> <span class="math">L<sub>B</sub>(x) = 0.5x<sup>4</sup> + 0.5x<sup>5</sup></span></li>
-        </ul>
-
-        <div class="interactive-box">
-            <h3>Gini Coefficient Verification</h3>
-            <p>Solve the definite integrals on scratch paper. Enter your final Gini scores below to verify your math before proceeding to the philosophy section. <em>(Round to three decimal places)</em>.</p>
-            
-            <p style="margin-top: 20px;">
-                Gini Coefficient for <strong>Society A (Norway)</strong>:<br>
-                <input type="number" id="giniA" step="0.001" placeholder="e.g. 0.123">
-                <button style="margin-top: 0;" onclick="checkMath('giniA', 0.267, 'fbA')">Check</button>
-                <span id="fbA" class="feedback"></span>
-            </p>
-            <p style="margin-top: 20px;">
-                Gini Coefficient for <strong>Society B (South Africa)</strong>:<br>
-                <input type="number" id="giniB" step="0.001" placeholder="e.g. 0.123">
-                <button style="margin-top: 0;" onclick="checkMath('giniB', 0.633, 'fbB')">Check</button>
-                <span id="fbB" class="feedback"></span>
-            </p>
-        </div>
-
-        <div class="interactive-box" style="text-align: center;">
-            <h3>Explore the Lorenz Area</h3>
-            <p>Drag the slider to increase inequality. The shaded area represents the accumulated inequality (Gini).</p>
-            <input type="range" id="slider1" min="0" max="100" value="0" oninput="updateGraph(this.value)" style="width: 80%; margin-bottom: 25px;">
-            
-            <svg width="100%" viewBox="-70 -30 300 300" style="max-width: 400px;">
-                <path id="shade1" d="M 0 200 L 200 0 Q 100 100 0 200 Z" fill="rgba(99, 102, 241, 0.2)"/>
-                
-                <line x1="50" y1="200" x2="50" y2="0" stroke="#f1f5f9" stroke-width="1"/>
-                <line x1="100" y1="200" x2="100" y2="0" stroke="#f1f5f9" stroke-width="1"/>
-                <line x1="150" y1="200" x2="150" y2="0" stroke="#f1f5f9" stroke-width="1"/>
-                <line x1="0" y1="150" x2="200" y2="150" stroke="#f1f5f9" stroke-width="1"/>
-                <line x1="0" y1="100" x2="200" y2="100" stroke="#f1f5f9" stroke-width="1"/>
-                <line x1="0" y1="50" x2="200" y2="50" stroke="#f1f5f9" stroke-width="1"/>
-                
-                <line x1="0" y1="200" x2="200" y2="200" stroke="#94a3b8" stroke-width="2"/>
-                <line x1="0" y1="0" x2="0" y2="200" stroke="#94a3b8" stroke-width="2"/>
-                
-                <text x="0" y="220" class="axis-label" text-anchor="middle">0</text>
-                <text x="100" y="220" class="axis-label" text-anchor="middle">0.5</text>
-                <text x="200" y="220" class="axis-label" text-anchor="middle">1.0</text>
-                <text x="100" y="255" class="axis-title" text-anchor="middle">Bottom Proportion of Population (x)</text>
-                
-                <text x="-10" y="104" class="axis-label" text-anchor="end">0.5</text>
-                <text x="-10" y="4" class="axis-label" text-anchor="end">1.0</text>
-                <text x="-50" y="100" class="axis-title" text-anchor="middle" transform="rotate(-90 -50 100)">Proportion of Total Wealth</text>
-                
-                <line x1="0" y1="200" x2="200" y2="0" stroke="#64748b" stroke-dasharray="5"/>
-                
-                <path id="curve1" d="M 0 200 Q 100 100 200 0" fill="transparent" stroke="url(#lineGradient)" stroke-width="3"/>
-                <defs>
-                    <linearGradient id="lineGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#8b5cf6" />
-                        <stop offset="100%" stop-color="#3b82f6" />
-                    </linearGradient>
-                </defs>
-            </svg>
-        </div>
-
-        <div class="nav-buttons">
-            <button onclick="nav('page1')">&larr; Back</button>
-            <button onclick="nav('page3')">Next: The Veil of Ignorance &rarr;</button>
-        </div>
-    </div>
-
-    <div id="page3" class="page">
-        <h2>3. The Veil of Ignorance</h2>
-        <p>Put away the calculator and put on the hat of a philosopher. In 1971, John Rawls introduced a thought experiment called the <strong>"Veil of Ignorance."</strong></p>
-        <p>Imagine you are waiting to be born into either Norway or South Africa, but you are behind a "veil"—you have absolutely no idea if you will be born rich, poor, healthy, sick, or into a minority group. Rawls argued that from this blind position, people would naturally design a society that protects the least advantaged, just in case they end up at the bottom.</p>
-
-        <div class="interactive-box">
-            <h3>Keep Track of the Odds</h3>
-            <p>Here are the real-world Gini coefficients you calculated on the previous page:</p>
-            <ul style="font-size: 1.1em; font-weight: 500;">
-                <li style="color: #059669;"><strong>Society A (Norway):</strong> G = 0.267</li>
-                <li style="color: #d97706;"><strong>Society B (South Africa):</strong> G = 0.633</li>
-            </ul>
-            <p style="font-size: 0.9em; color: var(--text-light);">* A lower Gini coefficient means lower wealth inequality.</p>
-        </div>
-
-        <div class="interactive-box">
-            <h3>The Simulator</h3>
-            <p>You must choose which society to be born into <em>before</em> the veil is lifted. Look at the inequality scores above. Which odds do you prefer?</p>
-            <button class="btn-norway" onclick="liftVeil('A')">I Choose Society A (Norway)</button>
-            <button class="btn-safrica" onclick="liftVeil('B')">I Choose Society B (South Africa)</button>
-            
-            <div id="veilResult" class="result-box"></div>
-        </div>
-
-        <div class="nav-buttons">
-            <button onclick="nav('page2')">&larr; Back</button>
-            <button onclick="nav('page4')">Next: Philosophy Part I &rarr;</button>
-        </div>
-    </div>
-
-    <div id="page4" class="page">
-        <h2>4. Defining Justice: The Missing Variables</h2>
-        <p>We used the Gini coefficient as a mathematical proxy for "justice." But mathematics has blind spots when it comes to the human experience.</p>
-        
-        <div class="interactive-box">
-            <h3>The Freedom Dilemma</h3>
-            <p>Imagine two newly formed societies:</p>
-            <ul>
-                <li><strong>Society X</strong> achieves a near-perfect Gini of 0.20, but the government achieves this by strictly assigning jobs and capping all salaries.</li>
-                <li><strong>Society Y</strong> has a highly unequal Gini of 0.45, but guarantees absolute freedom to choose your career, innovate, and keep your earnings.</li>
-            </ul>
-            <p>Which society is more "just"?</p>
-            
-            <button class="btn-dilemma-1" onclick="revealPillar1('X')">I choose Society X (Equality over Freedom)</button>
-            <button class="btn-dilemma-2" onclick="revealPillar1('Y')">I choose Society Y (Freedom over Equality)</button>
-            
-            <div id="pillar1Result" class="result-box"></div>
-        </div>
-
-        <div class="nav-buttons">
-            <button onclick="nav('page3')">&larr; Back</button>
-            <button onclick="nav('page5')" id="btnNext5" style="display:none;">Next: Philosophy Part II &rarr;</button>
-        </div>
-    </div>
-
-    <div id="page5" class="page">
-        <h2>5. The Ethics of Intervention</h2>
-        <p>If a nation has a high inequality score (like South Africa's 0.633), does the government have a moral obligation to fix it?</p>
-        
-        <div class="interactive-box">
-            <h3>The Innovation Dilemma</h3>
-            <p>A citizen in your society invents a revolutionary, cheap cure for a terrible disease. They sell it globally and become a billionaire overnight. Because of this single person, your nation's Gini coefficient spikes dramatically.</p>
-            <p>To fix the math and restore the "area under the curve," what do you do?</p>
-            
-            <button class="btn-dilemma-3" onclick="revealPillar2('Tax')">Tax them heavily to redistribute wealth</button>
-            <button class="btn-norway" onclick="revealPillar2('Keep')">Let them keep their wealth as a reward</button>
-            
-            <div id="pillar2Result" class="result-box"></div>
-        </div>
-
-        <div class="nav-buttons">
-            <button onclick="nav('page4')">&larr; Back</button>
-            <button onclick="nav('page6')" id="btnNext6" style="display:none;">Next: Final Reflection &rarr;</button>
-        </div>
-    </div>
-
-    <div id="page6" class="page">
-        <h2>6. Final Reflection: The Norway Paradox</h2>
-        <p>You have navigated the math, survived the simulator, and faced the philosophical dilemmas. Now it is time to formalize your thoughts.</p>
-        
-        <div class="interactive-box highlight-box">
-            <h3>Instructions for Submission</h3>
-            <p>Please navigate to <strong>Google Classroom</strong> and open the assignment titled <em>"Reflection: The Philosophy of Justice."</em></p>
-            <p><strong>Your reflection focuses on a single, real-world paradox:</strong></p>
-            
-            <div style="background: white; padding: 25px; border-radius: 12px; border: 1px solid #99f6e4; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-                <h4 style="margin-top: 0; color: #0d9488; font-family: 'Poppins', sans-serif; font-size: 1.2em;">The Entrepreneurship Paradox</h4>
-                <p>Norway achieves its low Gini coefficient (0.267) by enforcing heavily progressive income taxes. These taxes fund a massive social safety net, including universal healthcare, free higher education, and extensive unemployment benefits.</p>
-                <p>Based on the mathematical modeling and philosophical dilemmas you just completed, <strong>select and defend one of the following stances (at least 100 words and at most 1000 words)</strong>:</p>
-                <ol style="margin-top: 15px; margin-bottom: 20px;">
-                    <li style="margin-bottom: 12px;">Does Norway's system stifle innovation and the drive to start a business because the financial rewards are so heavily taxed?</li>
-                    <li>Or, does having a guaranteed safety net actually make citizens <em>more</em> willing to take bold entrepreneurial risks, knowing a failure will not leave them starving?</li>
+    <div class="shell">
+        <header class="masthead">
+            <h1>The Calculus of Justice</h1>
+            <p class="step-count" id="stepCount">Step 1 of 6</p>
+            <nav aria-label="Lesson progress">
+                <ol class="steps" id="stepList">
+                    <li class="is-current" aria-current="step"><span class="step-name">Inequality</span></li>
+                    <li><span class="step-name">Calculation</span></li>
+                    <li><span class="step-name">Veil</span></li>
+                    <li><span class="step-name">Justice</span></li>
+                    <li><span class="step-name">Ethics</span></li>
+                    <li><span class="step-name">Reflection</span></li>
                 </ol>
-                <p style="margin-bottom: 0; font-size: 0.9em; color: var(--text-light); font-style: italic;">Note: Ensure you reference the concept of equal outcomes vs. equal opportunity in your response.</p>
-            </div>
-        </div>
+            </nav>
+        </header>
 
-        <div class="nav-buttons">
-            <button onclick="nav('page5')">&larr; Back</button>
-            <div></div>
-        </div>
+        <main>
+            <section id="page1" class="page active" aria-labelledby="title1">
+                <div class="page-title">
+                    <span class="page-index" aria-hidden="true">01</span>
+                    <h2 id="title1">The Mathematics of Inequality</h2>
+                </div>
+                <p class="lede">How do we measure if a society is fair? Economists use a tool called the <strong>Lorenz Curve</strong> to graph the distribution of wealth. The x-axis represents the percentage of the population (from poorest to richest), and the y-axis represents the percentage of total wealth they hold.</p>
+                <p>If wealth were distributed perfectly equally, the bottom 20% of people would hold exactly 20% of the wealth, forming a perfectly straight line: <span class="math">y = x</span>.</p>
+                <p>In reality, the curve sags downward. The area between the line of perfect equality and the actual Lorenz curve represents total inequality. We calculate this area using definite integrals to find the <strong>Gini Coefficient</strong>.</p>
+
+                <div class="interactive-box">
+                    <h3>The Gini Formula</h3>
+                    <p>The Gini coefficient is exactly twice the area between the line of equality <span class="math">y = x</span> and the Lorenz curve <span class="math">L(x)</span>, evaluated from 0 to 1:</p>
+                    <p class="formula"><span class="eq"><span>G</span><span class="op">=</span><span>2</span><span class="integral-wrap"><span class="lim-top">1</span><span class="integral-sign">&int;</span><span class="lim-bot">0</span></span><span>[x &minus; L(x)] dx</span></span></p>
+                </div>
+
+                <div class="nav-buttons" aria-label="Step navigation">
+                    <button type="button" class="btn-next" onclick="nav('page2')">Next: The Calculation Engine &rarr;</button>
+                </div>
+            </section>
+
+            <section id="page2" class="page" hidden inert aria-labelledby="title2">
+                <div class="page-title">
+                    <span class="page-index" aria-hidden="true">02</span>
+                    <h2 id="title2">The Calculation Engine</h2>
+                </div>
+                <p class="lede">You are a mathematical analyst examining the real-world wealth distributions of two distinct countries. We have modeled their economies using the following polynomial functions:</p>
+                <ul class="models">
+                    <li>
+                        <span class="model-name">Society A (Norway)</span>
+                        <span class="math">L<sub>A</sub>(x) = 0.8x<sup>2</sup> + 0.2x</span>
+                    </li>
+                    <li>
+                        <span class="model-name">Society B (South Africa)</span>
+                        <span class="math">L<sub>B</sub>(x) = 0.5x<sup>4</sup> + 0.5x<sup>5</sup></span>
+                    </li>
+                </ul>
+
+                <div class="interactive-box">
+                    <h3>Gini Coefficient Verification</h3>
+                    <p>Solve the definite integrals on scratch paper. Enter your final Gini scores below to verify your math before proceeding to the philosophy section. <em>(Round to three decimal places)</em>.</p>
+                    <div class="gini-grid">
+                        <form class="gini-card" onsubmit="checkMath('giniA', 0.267, 'fbA'); return false;">
+                            <label for="giniA">Gini Coefficient for Society A (Norway)</label>
+                            <div class="answer-row">
+                                <input type="number" id="giniA" step="0.001" inputmode="decimal" placeholder="e.g. 0.123" autocomplete="off">
+                                <button type="submit" class="check-btn">Check</button>
+                            </div>
+                            <span id="fbA" class="feedback" role="status"></span>
+                        </form>
+                        <form class="gini-card" onsubmit="checkMath('giniB', 0.633, 'fbB'); return false;">
+                            <label for="giniB">Gini Coefficient for Society B (South Africa)</label>
+                            <div class="answer-row">
+                                <input type="number" id="giniB" step="0.001" inputmode="decimal" placeholder="e.g. 0.123" autocomplete="off">
+                                <button type="submit" class="check-btn">Check</button>
+                            </div>
+                            <span id="fbB" class="feedback" role="status"></span>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="interactive-box">
+                    <h3>Explore the Lorenz Area</h3>
+                    <p>Drag the slider to increase inequality. The shaded area represents the accumulated inequality (Gini).</p>
+                    <div class="slider-scale">
+                        <span>More equal</span>
+                        <span>More unequal</span>
+                    </div>
+                    <input type="range" id="slider1" min="0" max="100" value="0" oninput="updateGraph(this.value)" aria-label="Increase inequality">
+                    <figure class="graph">
+                        <svg viewBox="-88 -16 320 320" role="img" aria-labelledby="graphTitle graphDesc">
+                            <title id="graphTitle">Lorenz curve and the line of equality</title>
+                            <desc id="graphDesc">The shaded region between the diagonal and the curve is accumulated inequality. Dragging the slider makes the curve sag farther from equality.</desc>
+                            <path id="shade1" d="M 0 200 L 200 0 Q 100 100 0 200 Z" fill="rgba(30, 58, 95, 0.12)"/>
+                            <line x1="50" y1="200" x2="50" y2="0" stroke="#ece7df" stroke-width="1"/>
+                            <line x1="100" y1="200" x2="100" y2="0" stroke="#ece7df" stroke-width="1"/>
+                            <line x1="150" y1="200" x2="150" y2="0" stroke="#ece7df" stroke-width="1"/>
+                            <line x1="0" y1="150" x2="200" y2="150" stroke="#ece7df" stroke-width="1"/>
+                            <line x1="0" y1="100" x2="200" y2="100" stroke="#ece7df" stroke-width="1"/>
+                            <line x1="0" y1="50" x2="200" y2="50" stroke="#ece7df" stroke-width="1"/>
+                            <line x1="0" y1="200" x2="200" y2="200" stroke="#b7b0a6" stroke-width="1.5"/>
+                            <line x1="0" y1="0" x2="0" y2="200" stroke="#b7b0a6" stroke-width="1.5"/>
+                            <text x="0" y="220" class="axis-label" text-anchor="middle">0</text>
+                            <text x="100" y="220" class="axis-label" text-anchor="middle">0.5</text>
+                            <text x="200" y="220" class="axis-label" text-anchor="middle">1.0</text>
+                            <text x="100" y="252" class="axis-title" text-anchor="middle">Bottom Proportion of Population (x)</text>
+                            <text x="-10" y="204" class="axis-label" text-anchor="end">0</text>
+                            <text x="-10" y="104" class="axis-label" text-anchor="end">0.5</text>
+                            <text x="-10" y="8" class="axis-label" text-anchor="end">1.0</text>
+                            <text x="-62" y="100" class="axis-title" text-anchor="middle" transform="rotate(-90 -62 100)">Proportion of Total Wealth</text>
+                            <line x1="0" y1="200" x2="200" y2="0" stroke="#8a8178" stroke-dasharray="4 4"/>
+                            <path id="curve1" d="M 0 200 Q 100 100 200 0" fill="transparent" stroke="#1e3a5f" stroke-width="2.5"/>
+                        </svg>
+                        <ul class="legend">
+                            <li><span class="key key-equal"></span> Line of equality</li>
+                            <li><span class="key key-lorenz"></span> Lorenz curve</li>
+                            <li><span class="key key-area"></span> Inequality</li>
+                        </ul>
+                    </figure>
+                </div>
+
+                <div class="nav-buttons" aria-label="Step navigation">
+                    <button type="button" class="btn-back" onclick="nav('page1')">&larr; Back</button>
+                    <button type="button" class="btn-next" onclick="nav('page3')">Next: The Veil of Ignorance &rarr;</button>
+                </div>
+            </section>
+
+            <section id="page3" class="page" hidden inert aria-labelledby="title3">
+                <div class="page-title">
+                    <span class="page-index" aria-hidden="true">03</span>
+                    <h2 id="title3">The Veil of Ignorance</h2>
+                </div>
+                <p class="lede">Put away the calculator and put on the hat of a philosopher. In 1971, John Rawls introduced a thought experiment called the <strong>"Veil of Ignorance."</strong></p>
+                <p>Imagine you are waiting to be born into either Norway or South Africa, but you are behind a "veil"—you have absolutely no idea if you will be born rich, poor, healthy, sick, or into a minority group. Rawls argued that from this blind position, people would naturally design a society that protects the least advantaged, just in case they end up at the bottom.</p>
+
+                <div class="interactive-box">
+                    <h3>Keep Track of the Odds</h3>
+                    <p>Here are the real-world Gini coefficients you calculated on the previous page:</p>
+                    <ul class="stats">
+                        <li class="stat-a">
+                            <span class="stat-label">Society A (Norway)</span>
+                            <span class="stat-value">G = 0.267</span>
+                        </li>
+                        <li class="stat-b">
+                            <span class="stat-label">Society B (South Africa)</span>
+                            <span class="stat-value">G = 0.633</span>
+                        </li>
+                    </ul>
+                    <p class="note">* A lower Gini coefficient means lower wealth inequality.</p>
+                </div>
+
+                <div class="interactive-box">
+                    <h3>The Simulator</h3>
+                    <p>You must choose which society to be born into <em>before</em> the veil is lifted. Look at the inequality scores above. Which odds do you prefer?</p>
+                    <div class="choices choice-grid">
+                        <button type="button" class="btn-norway" aria-pressed="false" onclick="liftVeil('A', this)">I Choose Society A (Norway)</button>
+                        <button type="button" class="btn-safrica" aria-pressed="false" onclick="liftVeil('B', this)">I Choose Society B (South Africa)</button>
+                    </div>
+                    <div id="veilResult" class="result-box" hidden aria-live="polite"></div>
+                </div>
+
+                <div class="nav-buttons" aria-label="Step navigation">
+                    <button type="button" class="btn-back" onclick="nav('page2')">&larr; Back</button>
+                    <button type="button" class="btn-next" onclick="nav('page4')">Next: Philosophy Part I &rarr;</button>
+                </div>
+            </section>
+
+            <section id="page4" class="page" hidden inert aria-labelledby="title4">
+                <div class="page-title">
+                    <span class="page-index" aria-hidden="true">04</span>
+                    <h2 id="title4">Defining Justice: The Missing Variables</h2>
+                </div>
+                <p class="lede">We used the Gini coefficient as a mathematical proxy for "justice." But mathematics has blind spots when it comes to the human experience.</p>
+
+                <div class="interactive-box">
+                    <h3>The Freedom Dilemma</h3>
+                    <p>Imagine two newly formed societies:</p>
+                    <ul>
+                        <li><strong>Society X</strong> achieves a near-perfect Gini of 0.20, but the government achieves this by strictly assigning jobs and capping all salaries.</li>
+                        <li><strong>Society Y</strong> has a highly unequal Gini of 0.45, but guarantees absolute freedom to choose your career, innovate, and keep your earnings.</li>
+                    </ul>
+                    <p>Which society is more "just"?</p>
+                    <div class="choices choice-stack">
+                        <button type="button" class="btn-dilemma-1" aria-pressed="false" onclick="revealPillar1('X', this)">I choose Society X (Equality over Freedom)</button>
+                        <button type="button" class="btn-dilemma-2" aria-pressed="false" onclick="revealPillar1('Y', this)">I choose Society Y (Freedom over Equality)</button>
+                    </div>
+                    <div id="pillar1Result" class="result-box" hidden aria-live="polite"></div>
+                </div>
+
+                <div class="nav-buttons" aria-label="Step navigation">
+                    <button type="button" class="btn-back" onclick="nav('page3')">&larr; Back</button>
+                    <button type="button" class="btn-next" id="btnNext5" disabled title="Choose an option to continue" onclick="nav('page5')">Next: Philosophy Part II &rarr;</button>
+                </div>
+            </section>
+
+            <section id="page5" class="page" hidden inert aria-labelledby="title5">
+                <div class="page-title">
+                    <span class="page-index" aria-hidden="true">05</span>
+                    <h2 id="title5">The Ethics of Intervention</h2>
+                </div>
+                <p class="lede">If a nation has a high inequality score (like South Africa's 0.633), does the government have a moral obligation to fix it?</p>
+
+                <div class="interactive-box">
+                    <h3>The Innovation Dilemma</h3>
+                    <p>A citizen in your society invents a revolutionary, cheap cure for a terrible disease. They sell it globally and become a billionaire overnight. Because of this single person, your nation's Gini coefficient spikes dramatically.</p>
+                    <p>To fix the math and restore the "area under the curve," what do you do?</p>
+                    <div class="choices choice-stack">
+                        <button type="button" class="btn-dilemma-3" aria-pressed="false" onclick="revealPillar2('Tax', this)">Tax them heavily to redistribute wealth</button>
+                        <button type="button" class="btn-norway" aria-pressed="false" onclick="revealPillar2('Keep', this)">Let them keep their wealth as a reward</button>
+                    </div>
+                    <div id="pillar2Result" class="result-box" hidden aria-live="polite"></div>
+                </div>
+
+                <div class="nav-buttons" aria-label="Step navigation">
+                    <button type="button" class="btn-back" onclick="nav('page4')">&larr; Back</button>
+                    <button type="button" class="btn-next" id="btnNext6" disabled title="Choose an option to continue" onclick="nav('page6')">Next: Final Reflection &rarr;</button>
+                </div>
+            </section>
+
+            <section id="page6" class="page" hidden inert aria-labelledby="title6">
+                <div class="page-title">
+                    <span class="page-index" aria-hidden="true">06</span>
+                    <h2 id="title6">Final Reflection: The Norway Paradox</h2>
+                </div>
+                <p class="lede">You have navigated the math, survived the simulator, and faced the philosophical dilemmas. Now it is time to formalize your thoughts.</p>
+
+                <div class="interactive-box highlight-box">
+                    <h3>Instructions for Submission</h3>
+                    <p>Please navigate to <strong>Google Classroom</strong> and open the assignment titled <em>"Reflection: The Philosophy of Justice."</em></p>
+                    <p><strong>Your reflection focuses on a single, real-world paradox:</strong></p>
+                    <div class="prompt-card">
+                        <h4>The Entrepreneurship Paradox</h4>
+                        <p>Norway achieves its low Gini coefficient (0.267) by enforcing heavily progressive income taxes. These taxes fund a massive social safety net, including universal healthcare, free higher education, and extensive unemployment benefits.</p>
+                        <p>Based on the mathematical modeling and philosophical dilemmas you just completed, <strong>select and defend one of the following stances (at least 100 words and at most 1000 words)</strong>:</p>
+                        <ol class="stances">
+                            <li>Does Norway's system stifle innovation and the drive to start a business because the financial rewards are so heavily taxed?</li>
+                            <li>Or, does having a guaranteed safety net actually make citizens <em>more</em> willing to take bold entrepreneurial risks, knowing a failure will not leave them starving?</li>
+                        </ol>
+                        <p class="fine-print">Note: Ensure you reference the concept of equal outcomes vs. equal opportunity in your response.</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons" aria-label="Step navigation">
+                    <button type="button" class="btn-back" onclick="nav('page5')">&larr; Back</button>
+                </div>
+            </section>
+        </main>
+        <noscript>
+            <p class="noscript">Turn on JavaScript to move between the six parts of this lesson.</p>
+        </noscript>
     </div>
 
     <script>
-        // Navigation Logic
         function nav(pageId) {
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
+                page.hidden = true;
+                page.setAttribute('inert', '');
             });
-            document.getElementById(pageId).classList.add('active');
+            const page = document.getElementById(pageId);
+            page.hidden = false;
+            page.classList.add('active');
+            page.removeAttribute('inert');
+
+            const index = [...document.querySelectorAll('.page')].indexOf(page);
+            document.getElementById('stepCount').textContent = `Step ${index + 1} of 6`;
+            document.querySelectorAll('#stepList li').forEach((li, i) => {
+                li.classList.toggle('is-done', i < index);
+                li.classList.toggle('is-current', i === index);
+                if (i === index) li.setAttribute('aria-current', 'step');
+                else li.removeAttribute('aria-current');
+            });
             window.scrollTo(0, 0);
         }
 
-        // Graph Interactive Logic
         function updateGraph(val) {
-            let cpx = 100 + Number(val);
-            let cpy = 100 + Number(val);
-            
+            const cpx = 100 + Number(val);
+            const cpy = 100 + Number(val);
             document.getElementById('curve1').setAttribute('d', `M 0 200 Q ${cpx} ${cpy} 200 0`);
             document.getElementById('shade1').setAttribute('d', `M 0 200 L 200 0 Q ${cpx} ${cpy} 0 200 Z`);
         }
 
-        // Math Check Logic 
         function checkMath(inputId, target, feedbackId) {
-            let val = parseFloat(document.getElementById(inputId).value);
-            let fb = document.getElementById(feedbackId);
+            const val = parseFloat(document.getElementById(inputId).value);
+            const fb = document.getElementById(feedbackId);
             if (isNaN(val)) {
                 fb.textContent = "Please enter a number.";
                 fb.className = "feedback error";
@@ -452,62 +972,75 @@
             }
         }
 
-        // Simulator Logic 
-        function liftVeil(society) {
-            let resultDiv = document.getElementById('veilResult');
-            resultDiv.style.display = 'block';
-            let rand = Math.random();
-            
+        function markSelected(button) {
+            const group = button.closest('.choices');
+            group.querySelectorAll('button').forEach(b => {
+                const on = b === button;
+                b.classList.toggle('is-selected', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+        }
+
+        function reveal(el) {
+            el.hidden = false;
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+        }
+
+        function liftVeil(society, button) {
+            const resultDiv = document.getElementById('veilResult');
+            markSelected(button);
+            const rand = Math.random();
+            resultDiv.classList.remove('tone-green', 'tone-red', 'tone-amber');
+
             if (society === 'A') {
                 if (rand < 0.20) {
                     resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the bottom 20% of Norway. Because the Gini coefficient is low (0.267) and social safety nets are robust, your basic needs like healthcare and education are fully met.";
-                    resultDiv.style.borderLeftColor = "#10b981";
+                    resultDiv.classList.add('tone-green');
                 } else if (rand < 0.90) {
                     resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the middle class of Norway. Wealth is distributed relatively evenly, so you live a comfortable, stable life without extreme wealth gaps above you.";
-                    resultDiv.style.borderLeftColor = "#10b981";
+                    resultDiv.classList.add('tone-green');
                 } else {
                     resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the top 10% of Norway. You are wealthy and enjoy a high standard of living, though progressive taxation means you contribute heavily to the social floor below you.";
-                    resultDiv.style.borderLeftColor = "#10b981";
+                    resultDiv.classList.add('tone-green');
                 }
+            } else if (rand < 0.40) {
+                resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the bottom 40% of South Africa. Because the Gini coefficient is so high (0.633), your demographic holds almost none of the nation's wealth. You are likely facing systemic poverty and lack of access to basic services.";
+                resultDiv.classList.add('tone-red');
+            } else if (rand < 0.85) {
+                resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the middle class of South Africa. You work incredibly hard and have access to amenities, but you live with the stark contrast of extreme poverty on one side and massive wealth on the other.";
+                resultDiv.classList.add('tone-amber');
             } else {
-                if (rand < 0.40) {
-                    resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the bottom 40% of South Africa. Because the Gini coefficient is so high (0.633), your demographic holds almost none of the nation's wealth. You are likely facing systemic poverty and lack of access to basic services.";
-                    resultDiv.style.borderLeftColor = "#ef4444";
-                } else if (rand < 0.85) {
-                    resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> You were born into the middle class of South Africa. You work incredibly hard and have access to amenities, but you live with the stark contrast of extreme poverty on one side and massive wealth on the other.";
-                    resultDiv.style.borderLeftColor = "#f59e0b";
-                } else {
-                    resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> Jackpot! You were born into the top 1% of South Africa. You hold a vast proportion of the nation's total wealth and live in absolute luxury, sheltered from the economic realities of the majority.";
-                    resultDiv.style.borderLeftColor = "#f59e0b";
-                }
+                resultDiv.innerHTML = "<strong>The Veil is Lifted!</strong> Jackpot! You were born into the top 1% of South Africa. You hold a vast proportion of the nation's total wealth and live in absolute luxury, sheltered from the economic realities of the majority.";
+                resultDiv.classList.add('tone-amber');
             }
+            reveal(resultDiv);
         }
 
-        // Pillar 1 Interactive Logic
-        function revealPillar1(choice) {
-            let res = document.getElementById('pillar1Result');
-            res.style.display = 'block';
-            document.getElementById('btnNext5').style.display = 'block'; 
-            
-            if(choice === 'X') {
+        function revealPillar1(choice, button) {
+            const res = document.getElementById('pillar1Result');
+            document.getElementById('btnNext5').disabled = false;
+            markSelected(button);
+            if (choice === 'X') {
                 res.innerHTML = "<strong>You prioritized Equal Outcomes.</strong> Philosopher John Rawls might agree with protecting the bottom at all costs. However, economist Milton Friedman would argue that prioritizing equal outcomes over economic freedom ultimately destroys personal liberty. Can a society be truly 'just' if its citizens are not free to choose their own paths?";
             } else {
                 res.innerHTML = "<strong>You prioritized Equal Opportunity.</strong> You accept that personal freedom naturally leads to inequality. However, as the Gini coefficient grows, does 'equal opportunity' eventually become an illusion? If the gap is too wide, those born at the absolute bottom may never have a real chance to climb.";
             }
+            reveal(res);
         }
 
-        // Pillar 2 Interactive Logic
-        function revealPillar2(choice) {
-            let res = document.getElementById('pillar2Result');
-            res.style.display = 'block';
-            document.getElementById('btnNext6').style.display = 'block'; 
-            
-            if(choice === 'Tax') {
+        function revealPillar2(choice, button) {
+            const res = document.getElementById('pillar2Result');
+            document.getElementById('btnNext6').disabled = false;
+            markSelected(button);
+            if (choice === 'Tax') {
                 res.innerHTML = "<strong>You chose Intervention.</strong> Economists like Thomas Piketty argue aggressive taxation is necessary to prevent dangerous wealth concentration. However, philosopher Robert Nozick would counter that taxing the inventor's hard-earned money to fix a mathematical curve is morally equivalent to 'forced labor.'";
             } else {
                 res.innerHTML = "<strong>You chose Entitlement.</strong> Following Robert Nozick's theory, you believe wealth acquired fairly (without theft or fraud) belongs entirely to the creator. But by doing nothing, you allow the gap between the rich and poor to widen permanently. At what point does extreme wealth concentration threaten the stability of the entire society?";
             }
+            reveal(res);
         }
     </script>
 </body>
 </html>
+```
